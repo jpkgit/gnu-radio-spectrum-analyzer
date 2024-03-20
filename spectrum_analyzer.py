@@ -25,7 +25,6 @@ from gnuradio import soapy
 from gnuradio.qtgui import Range, RangeWidget
 from PyQt5 import QtCore
 import sip
-import time, threading
 
 
 
@@ -76,7 +75,7 @@ class spectrum_analyzer(gr.top_block, Qt.QWidget):
         # Blocks
         ##################################################
 
-        self._tuning_range = Range(1000000, 6000000000, 1000, 2400000000, 200)
+        self._tuning_range = Range(1000000, 6000000000, 8000000, 2400000000, 200)
         self._tuning_win = RangeWidget(self._tuning_range, self.set_tuning, "Frequency", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._tuning_win)
         self._if_gain_range = Range(0, 40, 1, 7, 200)
@@ -184,12 +183,6 @@ class spectrum_analyzer(gr.top_block, Qt.QWidget):
         self.soapy_hackrf_source_0.set_bandwidth(0, self.bandwidth)
 
 
-def foo(tb):
-    print(time.ctime())
-    center_freq = tb.get_tuning()
-    center_freq += 1000000
-    tb.set_tuning(center_freq)
-    threading.Timer(2, foo).start()
 
 
 def main(top_block_cls=spectrum_analyzer, options=None):
@@ -203,7 +196,7 @@ def main(top_block_cls=spectrum_analyzer, options=None):
 
     tb.start(1)
 
-    #tb.show()
+    tb.show()
 
     def sig_handler(sig=None, frame=None):
         tb.stop()
@@ -217,8 +210,6 @@ def main(top_block_cls=spectrum_analyzer, options=None):
     timer = Qt.QTimer()
     timer.start(500)
     timer.timeout.connect(lambda: None)
-
-    foo(tb)
 
     qapp.exec_()
 

@@ -139,7 +139,7 @@ blocks:
     orient: QtCore.Qt.Horizontal
     rangeType: float
     start: '1000000'
-    step: '1000'
+    step: '8000000'
     stop: '6000000000'
     value: '2400000000'
     widget: counter_slider
