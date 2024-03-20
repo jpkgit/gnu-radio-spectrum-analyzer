@@ -203,7 +203,7 @@ def main(top_block_cls=spectrum_analyzer, options=None):
 
     tb.start(1)
 
-    tb.show()
+    #tb.show()
 
     def sig_handler(sig=None, frame=None):
         tb.stop()
