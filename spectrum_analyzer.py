@@ -24,6 +24,7 @@ from gnuradio import eng_notation
 import osmosdr
 import time
 import sip
+from threading import Thread
 
 
 
@@ -122,16 +123,32 @@ class spectrum_analyzer(gr.top_block, Qt.QWidget):
         self.osmosdr_source_0.set_antenna('', 0)
         self.osmosdr_source_0.set_bandwidth(bandwidth, 0)
 
+        # Start the background thread
+        self.running = True
+        self.thread = Thread(target=self.update_freq)
+        self.thread.start()
+
 
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.osmosdr_source_0, 0), (self.qtgui_sink_x_0, 0))
+        self.connect((self.osmosdr_source_0, 0), (self.qtgui_sink_x_0, 0))        
 
+    def update_freq(self):
+        counter = 0
+        while self.running:
+            self.freq += 10e6
+            self.osmosdr_source_0.set_center_freq(self.freq, 0)            
+            time.sleep(1)
 
     def closeEvent(self, event):
         self.settings = Qt.QSettings("GNU Radio", "spectrum_analyzer")
         self.settings.setValue("geometry", self.saveGeometry())
+
+        self.running = False
+        self.thread.join()
+        #self.root.destroy()
+
         self.stop()
         self.wait()
 
