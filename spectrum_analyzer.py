@@ -136,15 +136,18 @@ class spectrum_analyzer(gr.top_block, Qt.QWidget):
 
     def update_freq(self):
         counter = 0
+
+        freqs_to_scan = [1.727e9, 1.775e9, 1.902e9] 
+        index = 0
+
         while self.running:
-            self.freq += 10e6
-            
-            if (self.freq > 6e9 - 10e6):
-                self.freq = 1e6
-            
-            #self.osmosdr_source_0.set_center_freq(self.freq, 0)            
-            self.set_freq(self.freq)
-            time.sleep(0.005)
+
+            if index < 0  or index > 2:
+                index = 0
+                     
+            self.set_freq(freqs_to_scan[index])
+            index = index + 1
+            time.sleep(5)
 
     def closeEvent(self, event):
         self.settings = Qt.QSettings("GNU Radio", "spectrum_analyzer")
