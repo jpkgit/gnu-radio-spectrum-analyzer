@@ -63,6 +63,7 @@ class spectrum_analyzer(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
+        self.variable_qtgui_range_sweep_speed = variable_qtgui_range_sweep_speed = 0.005
         self.variable_qtgui_check_box_sweep = variable_qtgui_check_box_sweep = 0
         self.sample_rate = sample_rate = 1000000
         self.samp_rate = samp_rate = 1000000
@@ -87,6 +88,9 @@ class spectrum_analyzer(gr.top_block, Qt.QWidget):
         self._bandwidth_range = qtgui.Range(1000, 10000000, 1000, 10000000, 200)
         self._bandwidth_win = qtgui.RangeWidget(self._bandwidth_range, self.set_bandwidth, "Bandwidth", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._bandwidth_win)
+        self._variable_qtgui_range_sweep_speed_range = qtgui.Range(0.001, 100, 0.001, 0.005, 200)
+        self._variable_qtgui_range_sweep_speed_win = qtgui.RangeWidget(self._variable_qtgui_range_sweep_speed_range, self.set_variable_qtgui_range_sweep_speed, "Sweep Speed (ms)", "counter_slider", float, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._variable_qtgui_range_sweep_speed_win)
         _variable_qtgui_check_box_sweep_check_box = Qt.QCheckBox("Sweep")
         self._variable_qtgui_check_box_sweep_choices = {True: True, False: False}
         self._variable_qtgui_check_box_sweep_choices_inv = dict((v,k) for k,v in self._variable_qtgui_check_box_sweep_choices.items())
@@ -169,6 +173,12 @@ class spectrum_analyzer(gr.top_block, Qt.QWidget):
         self.wait()
 
         event.accept()
+
+    def get_variable_qtgui_range_sweep_speed(self):
+        return self.variable_qtgui_range_sweep_speed
+
+    def set_variable_qtgui_range_sweep_speed(self, variable_qtgui_range_sweep_speed):
+        self.variable_qtgui_range_sweep_speed = variable_qtgui_range_sweep_speed
 
     def get_variable_qtgui_check_box_sweep(self):
         return self.variable_qtgui_check_box_sweep

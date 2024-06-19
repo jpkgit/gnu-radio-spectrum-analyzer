@@ -164,7 +164,28 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1184, 28.0]
+    coordinate: [1120, 28.0]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_range_sweep_speed
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: Sweep Speed (ms)
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0.001'
+    step: '0.001'
+    stop: '100'
+    value: '0.005'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1344, 28.0]
     rotation: 0
     state: enabled
 - name: osmosdr_source_0
