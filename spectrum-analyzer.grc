@@ -150,6 +150,23 @@ blocks:
     coordinate: [296, 20.0]
     rotation: 0
     state: true
+- name: variable_qtgui_check_box_sweep
+  id: variable_qtgui_check_box
+  parameters:
+    comment: ''
+    'false': 'False'
+    gui_hint: ''
+    label: Sweep
+    'true': 'True'
+    type: int
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1184, 28.0]
+    rotation: 0
+    state: enabled
 - name: osmosdr_source_0
   id: osmosdr_source
   parameters:

@@ -63,6 +63,7 @@ class spectrum_analyzer(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
+        self.variable_qtgui_check_box_sweep = variable_qtgui_check_box_sweep = 0
         self.sample_rate = sample_rate = 1000000
         self.samp_rate = samp_rate = 1000000
         self.if_gain = if_gain = 7
@@ -86,6 +87,13 @@ class spectrum_analyzer(gr.top_block, Qt.QWidget):
         self._bandwidth_range = qtgui.Range(1000, 10000000, 1000, 10000000, 200)
         self._bandwidth_win = qtgui.RangeWidget(self._bandwidth_range, self.set_bandwidth, "Bandwidth", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._bandwidth_win)
+        _variable_qtgui_check_box_sweep_check_box = Qt.QCheckBox("Sweep")
+        self._variable_qtgui_check_box_sweep_choices = {True: True, False: False}
+        self._variable_qtgui_check_box_sweep_choices_inv = dict((v,k) for k,v in self._variable_qtgui_check_box_sweep_choices.items())
+        self._variable_qtgui_check_box_sweep_callback = lambda i: Qt.QMetaObject.invokeMethod(_variable_qtgui_check_box_sweep_check_box, "setChecked", Qt.Q_ARG("bool", self._variable_qtgui_check_box_sweep_choices_inv[i]))
+        self._variable_qtgui_check_box_sweep_callback(self.variable_qtgui_check_box_sweep)
+        _variable_qtgui_check_box_sweep_check_box.stateChanged.connect(lambda i: self.set_variable_qtgui_check_box_sweep(self._variable_qtgui_check_box_sweep_choices[bool(i)]))
+        self.top_layout.addWidget(_variable_qtgui_check_box_sweep_check_box)
         self._sample_rate_range = qtgui.Range(1000000, 20000000, 1000000, 1000000, 200)
         self._sample_rate_win = qtgui.RangeWidget(self._sample_rate_range, self.set_sample_rate, "Sample Rate", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._sample_rate_win)
@@ -132,7 +140,7 @@ class spectrum_analyzer(gr.top_block, Qt.QWidget):
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.osmosdr_source_0, 0), (self.qtgui_sink_x_0, 0))        
+        self.connect((self.osmosdr_source_0, 0), (self.qtgui_sink_x_0, 0))
 
     def update_freq(self):
         counter = 0
@@ -161,6 +169,13 @@ class spectrum_analyzer(gr.top_block, Qt.QWidget):
         self.wait()
 
         event.accept()
+
+    def get_variable_qtgui_check_box_sweep(self):
+        return self.variable_qtgui_check_box_sweep
+
+    def set_variable_qtgui_check_box_sweep(self, variable_qtgui_check_box_sweep):
+        self.variable_qtgui_check_box_sweep = variable_qtgui_check_box_sweep
+        self._variable_qtgui_check_box_sweep_callback(self.variable_qtgui_check_box_sweep)
 
     def get_sample_rate(self):
         return self.sample_rate
@@ -195,7 +210,7 @@ class spectrum_analyzer(gr.top_block, Qt.QWidget):
     def set_freq(self, freq):
         self.freq = freq
         self.osmosdr_source_0.set_center_freq(self.freq, 0)
-        self.qtgui_sink_x_0.set_frequency_range(self.freq, self.bandwidth)          
+        self.qtgui_sink_x_0.set_frequency_range(self.freq, self.bandwidth)
 
     def get_bandwidth(self):
         return self.bandwidth
